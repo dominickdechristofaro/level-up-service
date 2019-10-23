@@ -16,8 +16,8 @@ public class LevelUp implements Serializable {
     private Integer customerId;
     @NotNull(message = "points cannot be null")
     private Integer points;
-    @JsonDeserialize(as = LocalDateDeserializer.class)
-    @JsonSerialize(as = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate memberDate;
 
     public LevelUp() {
