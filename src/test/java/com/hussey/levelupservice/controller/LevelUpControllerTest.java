@@ -51,7 +51,7 @@ class LevelUpControllerTest {
     }
 
     @Test
-    void test_getAll_WillReturnListOfLevelUpObjects_AndStatusIs_200() throws Exception {
+    public void test_getAll_WillReturnListOfLevelUpObjects_AndStatusIs_200() throws Exception {
         List<LevelUp> all = new ArrayList<>();
         all.add(outputLvl);
         all.add(outputLvl2);
@@ -65,7 +65,7 @@ class LevelUpControllerTest {
     }
 
     @Test
-    void test_saveLevelUp_WillReturnObjectWithAnId_AndStatusIs_201() throws Exception {
+    public void test_saveLevelUp_WillReturnObjectWithAnId_AndStatusIs_201() throws Exception {
         when(levelDao.saveLevelUp(inputLvl)).thenReturn(outputLvl);
 
         mockMvc.perform(post("/levelup")
@@ -79,7 +79,7 @@ class LevelUpControllerTest {
     }
 
     @Test
-    void test_updateLevelUp_WillCallUpdateMethod_AndStatusIs_202() throws Exception {
+    public void test_updateLevelUp_WillCallUpdateMethod_AndStatusIs_202() throws Exception {
 
         mockMvc.perform(put("/levelup")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -91,7 +91,7 @@ class LevelUpControllerTest {
     }
 
     @Test
-    void test_findLevelUpById_WillReturnObject_AndStatusIs_200() throws Exception {
+    public void test_findLevelUpById_WillReturnObject_AndStatusIs_200() throws Exception {
 
         when(levelDao.findLevelUp(2)).thenReturn(outputLvl2);
         mockMvc.perform(get("/levelup/2"))
@@ -101,7 +101,7 @@ class LevelUpControllerTest {
     }
 
     @Test
-    void deleteLevelUpById() throws Exception {
+    public void test_deleteLevelUpById_WillBeVoid_AndStatusIs_202() throws Exception {
 
         mockMvc.perform(delete("/levelup/10"))
                 .andDo(print())
@@ -109,4 +109,50 @@ class LevelUpControllerTest {
                 .andExpect(content().string(""));
 
     }
+
+    @Test
+    public void test_saveLevelUp_WillFailInInputsAreMissing_AndStatusIs_422() throws Exception {
+
+        LevelUp failLvl = new LevelUp();
+
+        mockMvc.perform(post("/levelup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(writeToJson(failLvl)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+    }
+
+    @Test
+    public void test_updateLevelUp_WillFailIfInputsAreMissing_AndStatusIs_422() throws Exception {
+        LevelUp failUpdate = new LevelUp();
+
+        mockMvc.perform(post("/levelup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("utf-8")
+                .content(writeToJson(failUpdate)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity());
+
+    }
+
+    @Test
+    public void test_FindLevelUpById_WillFailIfIdIsString_AndStatusIs_406() throws Exception {
+
+        mockMvc.perform(get("/levelup/true=true"))
+                .andDo(print())
+                .andExpect(status().isNotAcceptable());
+
+    }
+
+    @Test
+    public void test_FindLevelUpById_WillThrowErrorIfNotFound_AndStatusIs_404() throws Exception {
+
+        mockMvc.perform(get("/levelup/10"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
+
 }
