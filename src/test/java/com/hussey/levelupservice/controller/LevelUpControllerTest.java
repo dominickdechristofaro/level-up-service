@@ -91,6 +91,16 @@ class LevelUpControllerTest {
     }
 
     @Test
+    public void test_FindLevelUpByCustomerId_WillReturnCorrectObject_AndStatusIs_200() throws Exception {
+        when(levelDao.findByCustomerId(2)).thenReturn(outputLvl2);
+
+        mockMvc.perform(get("/levelup/customer/2"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(writeToJson(outputLvl2)));
+    }
+
+    @Test
     public void test_findLevelUpById_WillReturnObject_AndStatusIs_200() throws Exception {
 
         when(levelDao.findLevelUp(2)).thenReturn(outputLvl2);

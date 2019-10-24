@@ -37,6 +37,8 @@ public class LevelUpDaoJdbcImpl implements LevelUpDao {
             "delete from level_up where level_up_id = ?";
     private final String FIND_ALL_SQL =
             "select * from level_up";
+    private final String FIND_BY_CUSTOMER_ID_SQL =
+            "select * from level_up where customer_id = ?";
 
     @Override
     @Transactional
@@ -59,6 +61,15 @@ public class LevelUpDaoJdbcImpl implements LevelUpDao {
     @Override
     public List<LevelUp> findAll() {
         return sql.query(FIND_ALL_SQL, this::mapLvlToRow);
+    }
+
+    @Override
+    public LevelUp findByCustomerId(int id) {
+        try {
+            return sql.queryForObject(FIND_BY_CUSTOMER_ID_SQL, this::mapLvlToRow, id);
+        } catch(EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

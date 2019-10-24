@@ -43,6 +43,13 @@ public class LevelUpController {
                 .orElseThrow(() -> new NoSuchElementException("No Element found for that id"));
     }
 
+    @GetMapping("/customer/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public LevelUp findLevelUpByCustomerId(@PathVariable int id) {
+        return Optional.ofNullable(levelDao.findByCustomerId(id))
+                .orElseThrow(()-> new NoSuchElementException("Could not find that customer in the system"));
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteLevelUpById(@PathVariable int id) {

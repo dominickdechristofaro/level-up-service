@@ -42,6 +42,12 @@ class LevelUpDaoJdbcImplTest {
     }
 
     @Test
+    void test_FindLevelUpByCustomerId_WillReturnTheCorrectObject() {
+        testLevel = dao.saveLevelUp(testLevel);
+        assertEquals(testLevel, dao.findByCustomerId(testLevel.getCustomerId()));
+    }
+
+    @Test
     void test_findAll_WillReturnAllObjectsInTheDb() {
         dao.saveLevelUp(testLevel);
         dao.saveLevelUp(testLevel2);
